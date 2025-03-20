@@ -117,7 +117,7 @@ func (b *HPointRingBuffer) NextPoint() (*promql.HPoint, error) {
 			newSize = 2
 		}
 
-		newSlice, err := getHPointSliceForRingBuffer(newSize, b.memoryConsumptionTracker)
+		newSlice, err := getHPointSliceForRingBuffer(int64(newSize), b.memoryConsumptionTracker)
 		if err != nil {
 			return nil, err
 		}
@@ -248,7 +248,7 @@ func (v HPointRingBufferView) CopyPoints() ([]promql.HPoint, error) {
 	}
 
 	head, tail := v.UnsafePoints()
-	combined, err := getHPointSliceForRingBuffer(len(head)+len(tail), v.buffer.memoryConsumptionTracker)
+	combined, err := getHPointSliceForRingBuffer(int64(len(head)+len(tail)), v.buffer.memoryConsumptionTracker)
 	if err != nil {
 		return nil, err
 	}

@@ -179,7 +179,7 @@ func (t *RangeQuery) NextSeries(ctx context.Context) (types.InstantVectorSeriesD
 	t.returnSeriesToPool(series)
 	t.seriesIndexInCurrentGroup++
 
-	if t.seriesIndexInCurrentGroup >= t.currentGroup.totalSeries {
+	if int64(t.seriesIndexInCurrentGroup) >= t.currentGroup.totalSeries {
 		t.returnGroupToPool(t.currentGroup)
 		t.currentGroup = nil
 		t.seriesIndexInCurrentGroup = 0
@@ -200,7 +200,7 @@ func (t *RangeQuery) ensureCurrentGroupPopulated(ctx context.Context) error {
 	t.currentGroup = t.remainingGroups[0]
 	t.remainingGroups = t.remainingGroups[1:]
 
-	for t.currentGroup.seriesRead() < t.currentGroup.totalSeries {
+	for int64(t.currentGroup.seriesRead()) < t.currentGroup.totalSeries {
 		if err := t.readNextSeries(ctx); err != nil {
 			return err
 		}
@@ -300,10 +300,10 @@ func (t *RangeQuery) accumulateIntoGroup(data types.InstantVectorSeriesData, g *
 
 		if g.seriesForTimestamps[timestampIndex] == nil {
 			// This is the first time we've seen a point for this timestamp, create the list of source series.
-			maximumPossibleSeries := min(limit, int64(g.totalSeries))
+			maximumPossibleSeries := min(limit, g.totalSeries)
 
 			var err error
-			g.seriesForTimestamps[timestampIndex], err = types.IntSlicePool.Get(int(maximumPossibleSeries), t.MemoryConsumptionTracker)
+			g.seriesForTimestamps[timestampIndex], err = types.IntSlicePool.Get(maximumPossibleSeries, t.MemoryConsumptionTracker)
 			if err != nil {
 				return err
 			}
@@ -411,8 +411,8 @@ func (t *RangeQuery) Close() {
 }
 
 type rangeQueryGroup struct {
-	lastSeriesIndex int // The index (from the inner operator) of the last series that will contribute to this group
-	totalSeries     int // The total number of series that will contribute to this group
+	lastSeriesIndex int   // The index (from the inner operator) of the last series that will contribute to this group
+	totalSeries     int64 // The total number of series that will contribute to this group
 
 	series []rangeQuerySeries
 
@@ -424,7 +424,7 @@ func (g *rangeQueryGroup) seriesRead() int {
 }
 
 type rangeQuerySeries struct {
-	pointCount        int       // Number of points that will be returned (should equal the number of true elements in shouldReturnPoint)
+	pointCount        int64     // Number of points that will be returned (should equal the number of true elements in shouldReturnPoint)
 	shouldReturnPoint []bool    // One entry per timestamp, true means the value should be returned
 	values            []float64 // One entry per timestamp with value for that timestamp (entry only guaranteed to be populated if value at that timestamp might be returned)
 }
@@ -436,7 +436,7 @@ func (s *rangeQuerySeries) ensureSlicesPopulated(data types.InstantVectorSeriesD
 	}
 
 	lastPointIndex := timeRange.PointIndex(data.Floats[len(data.Floats)-1].T)
-	sliceLength := int(lastPointIndex + 1)
+	sliceLength := lastPointIndex + 1
 
 	var err error
 	s.shouldReturnPoint, err = types.BoolSlicePool.Get(sliceLength, memoryConsumptionTracker)

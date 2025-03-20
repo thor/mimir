@@ -283,7 +283,7 @@ func (g *GroupedVectorVectorBinaryOperation) computeOutputSeries() ([]types.Seri
 	outputSeriesLabelsFunc := g.outputSeriesLabelsFunc()
 	buf := make([]byte, 0, 1024)
 
-	manySideSeriesUsed, err := types.BoolSlicePool.Get(len(g.manySideMetadata), g.MemoryConsumptionTracker)
+	manySideSeriesUsed, err := types.BoolSlicePool.Get(int64(len(g.manySideMetadata)), g.MemoryConsumptionTracker)
 	if err != nil {
 		return nil, nil, nil, nil, err
 	}
@@ -337,7 +337,7 @@ func (g *GroupedVectorVectorBinaryOperation) computeOutputSeries() ([]types.Seri
 	}
 
 	// Next, go through all the "one" side groups again, and determine which of the "one" side series we'll actually need.
-	oneSideSeriesUsed, err := types.BoolSlicePool.Get(len(g.oneSideMetadata), g.MemoryConsumptionTracker)
+	oneSideSeriesUsed, err := types.BoolSlicePool.Get(int64(len(g.oneSideMetadata)), g.MemoryConsumptionTracker)
 	if err != nil {
 		return nil, nil, nil, nil, err
 	}
@@ -366,7 +366,7 @@ func (g *GroupedVectorVectorBinaryOperation) computeOutputSeries() ([]types.Seri
 	}
 
 	// Finally, construct the list of series that this operator will return.
-	outputMetadata := types.GetSeriesMetadataSlice(len(outputSeriesMap))
+	outputMetadata := types.GetSeriesMetadataSlice(int64(len(outputSeriesMap)))
 	outputSeries := make([]*groupedBinaryOperationOutputSeries, 0, len(outputSeriesMap))
 
 	for _, o := range outputSeriesMap {

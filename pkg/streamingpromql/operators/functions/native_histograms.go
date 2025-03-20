@@ -16,7 +16,7 @@ import (
 )
 
 func HistogramAvg(seriesData types.InstantVectorSeriesData, _ []types.ScalarData, _ types.QueryTimeRange, memoryConsumptionTracker *limiting.MemoryConsumptionTracker) (types.InstantVectorSeriesData, error) {
-	fPoints, err := types.FPointSlicePool.Get(len(seriesData.Histograms), memoryConsumptionTracker)
+	fPoints, err := types.FPointSlicePool.Get(int64(len(seriesData.Histograms)), memoryConsumptionTracker)
 	if err != nil {
 		return types.InstantVectorSeriesData{}, err
 	}
@@ -38,7 +38,7 @@ func HistogramAvg(seriesData types.InstantVectorSeriesData, _ []types.ScalarData
 }
 
 func HistogramCount(seriesData types.InstantVectorSeriesData, _ []types.ScalarData, _ types.QueryTimeRange, memoryConsumptionTracker *limiting.MemoryConsumptionTracker) (types.InstantVectorSeriesData, error) {
-	fPoints, err := types.FPointSlicePool.Get(len(seriesData.Histograms), memoryConsumptionTracker)
+	fPoints, err := types.FPointSlicePool.Get(int64(len(seriesData.Histograms)), memoryConsumptionTracker)
 	if err != nil {
 		return types.InstantVectorSeriesData{}, err
 	}
@@ -60,7 +60,7 @@ func HistogramCount(seriesData types.InstantVectorSeriesData, _ []types.ScalarDa
 }
 
 func HistogramFraction(seriesData types.InstantVectorSeriesData, scalarArgsData []types.ScalarData, timeRange types.QueryTimeRange, memoryConsumptionTracker *limiting.MemoryConsumptionTracker) (types.InstantVectorSeriesData, error) {
-	fPoints, err := types.FPointSlicePool.Get(len(seriesData.Histograms), memoryConsumptionTracker)
+	fPoints, err := types.FPointSlicePool.Get(int64(len(seriesData.Histograms)), memoryConsumptionTracker)
 	if err != nil {
 		return types.InstantVectorSeriesData{}, err
 	}
@@ -93,7 +93,7 @@ func HistogramFraction(seriesData types.InstantVectorSeriesData, scalarArgsData 
 // Float values are ignored.
 func HistogramStdDevStdVar(isStdDev bool) InstantVectorSeriesFunction {
 	return func(seriesData types.InstantVectorSeriesData, _ []types.ScalarData, _ types.QueryTimeRange, memoryConsumptionTracker *limiting.MemoryConsumptionTracker) (types.InstantVectorSeriesData, error) {
-		fPoints, err := types.FPointSlicePool.Get(len(seriesData.Histograms), memoryConsumptionTracker)
+		fPoints, err := types.FPointSlicePool.Get(int64(len(seriesData.Histograms)), memoryConsumptionTracker)
 		if err != nil {
 			return types.InstantVectorSeriesData{}, err
 		}
@@ -142,7 +142,7 @@ func HistogramStdDevStdVar(isStdDev bool) InstantVectorSeriesFunction {
 }
 
 func HistogramSum(seriesData types.InstantVectorSeriesData, _ []types.ScalarData, _ types.QueryTimeRange, memoryConsumptionTracker *limiting.MemoryConsumptionTracker) (types.InstantVectorSeriesData, error) {
-	floats, err := types.FPointSlicePool.Get(len(seriesData.Histograms), memoryConsumptionTracker)
+	floats, err := types.FPointSlicePool.Get(int64(len(seriesData.Histograms)), memoryConsumptionTracker)
 	if err != nil {
 		return types.InstantVectorSeriesData{}, err
 	}

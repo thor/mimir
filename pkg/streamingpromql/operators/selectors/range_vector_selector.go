@@ -54,7 +54,7 @@ func (m *RangeVectorSelector) SeriesMetadata(ctx context.Context) ([]types.Serie
 	return m.Selector.SeriesMetadata(ctx)
 }
 
-func (m *RangeVectorSelector) StepCount() int {
+func (m *RangeVectorSelector) StepCount() int64 {
 	return m.Selector.TimeRange.StepCount
 }
 

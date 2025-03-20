@@ -147,7 +147,7 @@ func (v *VectorScalarBinaryOperation) NextSeries(ctx context.Context) (types.Ins
 		if haveMixedFloatsAndHistograms || cap(series.Floats) < pointCount {
 			// We have to get a new slice.
 			var err error
-			fPoints, err = types.FPointSlicePool.Get(pointCount, v.MemoryConsumptionTracker)
+			fPoints, err = types.FPointSlicePool.Get(int64(pointCount), v.MemoryConsumptionTracker)
 			return err
 		}
 
@@ -161,7 +161,7 @@ func (v *VectorScalarBinaryOperation) NextSeries(ctx context.Context) (types.Ins
 		if haveMixedFloatsAndHistograms || cap(series.Histograms) < pointCount {
 			// We have to get a new slice.
 			var err error
-			hPoints, err = types.HPointSlicePool.Get(pointCount, v.MemoryConsumptionTracker)
+			hPoints, err = types.HPointSlicePool.Get(int64(pointCount), v.MemoryConsumptionTracker)
 			return err
 		}
 

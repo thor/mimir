@@ -57,7 +57,7 @@ func (b *FPointRingBuffer) Append(p promql.FPoint) error {
 			newSize = 2
 		}
 
-		newSlice, err := getFPointSliceForRingBuffer(newSize, b.memoryConsumptionTracker)
+		newSlice, err := getFPointSliceForRingBuffer(int64(newSize), b.memoryConsumptionTracker)
 		if err != nil {
 			return err
 		}
@@ -211,7 +211,7 @@ func (v FPointRingBufferView) CopyPoints() ([]promql.FPoint, error) {
 	}
 
 	head, tail := v.UnsafePoints()
-	combined, err := getFPointSliceForRingBuffer(len(head)+len(tail), v.buffer.memoryConsumptionTracker)
+	combined, err := getFPointSliceForRingBuffer(int64(len(head)+len(tail)), v.buffer.memoryConsumptionTracker)
 	if err != nil {
 		return nil, err
 	}

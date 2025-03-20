@@ -134,7 +134,7 @@ func mergeOneSideFloats(data []types.InstantVectorSeriesData, sourceSeriesIndice
 	// Because we aren't re-sorting here it doesn't matter that sourceSeriesIndices remains longer.
 	data = data[:remainingSeriesWithFloats]
 
-	output, err := types.FPointSlicePool.Get(mergedSize, memoryConsumptionTracker)
+	output, err := types.FPointSlicePool.Get(int64(mergedSize), memoryConsumptionTracker)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -259,7 +259,7 @@ func mergeOneSideHistograms(data []types.InstantVectorSeriesData, sourceSeriesIn
 	// Because we aren't re-sorting here it doesn't matter that sourceSeriesIndices remains longer.
 	data = data[:remainingSeriesWithHistograms]
 
-	output, err := types.HPointSlicePool.Get(mergedSize, memoryConsumptionTracker)
+	output, err := types.HPointSlicePool.Get(int64(mergedSize), memoryConsumptionTracker)
 	if err != nil {
 		return nil, nil, err
 	}

@@ -109,7 +109,7 @@ func (s *Subquery) NextStepSamples() (*types.RangeVectorStepData, error) {
 	return s.stepData, nil
 }
 
-func (s *Subquery) StepCount() int {
+func (s *Subquery) StepCount() int64 {
 	return s.ParentQueryTimeRange.StepCount
 }
 

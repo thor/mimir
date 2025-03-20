@@ -49,7 +49,7 @@ type RangeVectorOperator interface {
 
 	// StepCount returns the number of time steps produced for each series by this operator.
 	// StepCount must only be called after calling SeriesMetadata.
-	StepCount() int
+	StepCount() int64
 
 	// Range returns the time range selected by this operator at each time step.
 	//

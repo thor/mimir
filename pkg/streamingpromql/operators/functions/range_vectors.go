@@ -713,7 +713,7 @@ func quantileOverTime(step *types.RangeVectorStepData, _ float64, args []types.S
 	}
 
 	head, tail := step.Floats.UnsafePoints()
-	values, err := types.Float64SlicePool.Get(len(head)+len(tail), memoryConsumptionTracker)
+	values, err := types.Float64SlicePool.Get(int64(len(head)+len(tail)), memoryConsumptionTracker)
 	if err != nil {
 		return 0, false, nil, err
 	}

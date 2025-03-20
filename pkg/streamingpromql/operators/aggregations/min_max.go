@@ -91,7 +91,7 @@ func (g *MinMaxAggregationGroup) AccumulateSeries(data types.InstantVectorSeries
 }
 
 func (g *MinMaxAggregationGroup) ComputeOutputSeries(timeRange types.QueryTimeRange, memoryConsumptionTracker *limiting.MemoryConsumptionTracker) (types.InstantVectorSeriesData, bool, error) {
-	floatPointCount := 0
+	floatPointCount := int64(0)
 	for _, p := range g.floatPresent {
 		if p {
 			floatPointCount++

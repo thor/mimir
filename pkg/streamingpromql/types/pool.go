@@ -24,7 +24,7 @@ var (
 	})
 )
 
-func GetMatrix(size int) promql.Matrix {
+func GetMatrix(size int64) promql.Matrix {
 	return matrixPool.Get(size)
 }
 
@@ -32,7 +32,7 @@ func PutMatrix(m promql.Matrix) {
 	matrixPool.Put(m)
 }
 
-func GetSeriesMetadataSlice(size int) []SeriesMetadata {
+func GetSeriesMetadataSlice(size int64) []SeriesMetadata {
 	return seriesMetadataSlicePool.Get(size)
 }
 

@@ -85,7 +85,7 @@ func (t *InstantQuery) SeriesMetadata(ctx context.Context) ([]types.SeriesMetada
 		seriesToGroups = append(seriesToGroups, g)
 	}
 
-	outputSeriesCount := 0
+	outputSeriesCount := int64(0)
 
 	for idx, series := range innerSeries {
 		g := seriesToGroups[idx]
@@ -202,7 +202,7 @@ func (t *InstantQuery) accumulateValue(metadata types.SeriesMetadata, value floa
 			maximumPossibleSeries := min(t.k, int64(g.seriesCount))
 
 			var err error
-			g.series, err = instantQuerySeriesSlicePool.Get(int(maximumPossibleSeries), t.MemoryConsumptionTracker)
+			g.series, err = instantQuerySeriesSlicePool.Get(int64(int(maximumPossibleSeries)), t.MemoryConsumptionTracker)
 			if err != nil {
 				return false, err
 			}

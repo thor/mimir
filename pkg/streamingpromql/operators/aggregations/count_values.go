@@ -71,7 +71,7 @@ func NewCountValues(
 
 type countValuesSeries struct {
 	labels           labels.Labels
-	outputPointCount int
+	outputPointCount int64
 	count            []int // One entry per timestamp.
 }
 
@@ -125,7 +125,7 @@ func (c *CountValues) SeriesMetadata(ctx context.Context) ([]types.SeriesMetadat
 		types.PutInstantVectorSeriesData(data, c.MemoryConsumptionTracker)
 	}
 
-	outputMetadata := types.GetSeriesMetadataSlice(len(accumulator))
+	outputMetadata := types.GetSeriesMetadataSlice(int64(len(accumulator)))
 	c.series = make([][]promql.FPoint, 0, len(accumulator))
 
 	for _, s := range accumulator {

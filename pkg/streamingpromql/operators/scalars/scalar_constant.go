@@ -44,8 +44,8 @@ func (s *ScalarConstant) GetValues(_ context.Context) (types.ScalarData, error) 
 
 	samples = samples[:s.TimeRange.StepCount]
 
-	for step := 0; step < s.TimeRange.StepCount; step++ {
-		samples[step].T = s.TimeRange.StartT + int64(step)*s.TimeRange.IntervalMilliseconds
+	for step := int64(0); step < s.TimeRange.StepCount; step++ {
+		samples[step].T = s.TimeRange.StartT + step*s.TimeRange.IntervalMilliseconds
 		samples[step].F = s.Value
 	}
 

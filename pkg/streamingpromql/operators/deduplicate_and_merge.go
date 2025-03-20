@@ -91,7 +91,7 @@ func (d *DeduplicateAndMerge) computeOutputSeriesGroups(innerMetadata []types.Se
 	})
 
 	// Now that we know which series we'll return, and in what order, create the list of output series.
-	outputMetadata := types.GetSeriesMetadataSlice(len(outputGroups))
+	outputMetadata := types.GetSeriesMetadataSlice(int64(len(outputGroups)))
 
 	for _, group := range outputGroups {
 		outputMetadata = append(outputMetadata, innerMetadata[group[0]])

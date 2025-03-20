@@ -160,7 +160,7 @@ func (o *OrBinaryOperation) computeSeriesOutputOrder(leftMetadata []types.Series
 
 	nextLeftSeriesToRead := 0
 	lastSeriesFromLeft := false
-	series := types.GetSeriesMetadataSlice(len(leftMetadata) + len(rightMetadata))
+	series := types.GetSeriesMetadataSlice(int64(len(leftMetadata) + len(rightMetadata)))
 
 	for nextRightSeriesToRead, rightGroup := range o.rightSeriesGroups {
 		// Check if we need to advance through some left series first.

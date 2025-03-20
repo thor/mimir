@@ -668,7 +668,7 @@ func (q *Query) populateStringFromStringOperator(str string) promql.String {
 
 func (q *Query) populateVectorFromInstantVectorOperator(ctx context.Context, o types.InstantVectorOperator, series []types.SeriesMetadata) (promql.Vector, error) {
 	ts := timeMilliseconds(q.statement.Start)
-	v, err := types.VectorPool.Get(len(series), q.memoryConsumptionTracker)
+	v, err := types.VectorPool.Get(int64(len(series)), q.memoryConsumptionTracker)
 	if err != nil {
 		return nil, err
 	}
@@ -718,7 +718,7 @@ func (q *Query) populateVectorFromInstantVectorOperator(ctx context.Context, o t
 }
 
 func (q *Query) populateMatrixFromInstantVectorOperator(ctx context.Context, o types.InstantVectorOperator, series []types.SeriesMetadata) (promql.Matrix, error) {
-	m := types.GetMatrix(len(series))
+	m := types.GetMatrix(int64(len(series)))
 
 	for i, s := range series {
 		d, err := o.NextSeries(ctx)
@@ -754,7 +754,7 @@ func (q *Query) populateMatrixFromInstantVectorOperator(ctx context.Context, o t
 }
 
 func (q *Query) populateMatrixFromRangeVectorOperator(ctx context.Context, o types.RangeVectorOperator, series []types.SeriesMetadata) (promql.Matrix, error) {
-	m := types.GetMatrix(len(series))
+	m := types.GetMatrix(int64(len(series)))
 
 	for i, s := range series {
 		err := o.NextSeries(ctx)

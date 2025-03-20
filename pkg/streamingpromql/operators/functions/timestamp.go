@@ -27,7 +27,7 @@ func timestamp(data types.InstantVectorSeriesData, _ []types.ScalarData, _ types
 		defer types.FPointSlicePool.Put(data.Floats, memoryConsumptionTracker)
 
 		var err error
-		output.Floats, err = types.FPointSlicePool.Get(len(data.Floats)+len(data.Histograms), memoryConsumptionTracker)
+		output.Floats, err = types.FPointSlicePool.Get(int64(len(data.Floats)+len(data.Histograms)), memoryConsumptionTracker)
 
 		if err != nil {
 			return types.InstantVectorSeriesData{}, err

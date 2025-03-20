@@ -19,20 +19,20 @@ import (
 // - only supports using a factor of 2
 type BucketedPool[T ~[]E, E any] struct {
 	buckets []zeropool.Pool[T]
-	maxSize uint
+	maxSize uint64
 	// make is the function used to create an empty slice when none exist yet.
 	make func(int) T
 }
 
 // NewBucketedPool returns a new BucketedPool with buckets separated by a factor of 2 up to maxSize.
-func NewBucketedPool[T ~[]E, E any](maxSize uint, makeFunc func(int) T) *BucketedPool[T, E] {
+func NewBucketedPool[T ~[]E, E any](maxSize uint64, makeFunc func(int) T) *BucketedPool[T, E] {
 	if maxSize <= 1 {
 		panic("invalid maximum pool size")
 	} else if !IsPowerOfTwo(int(maxSize)) {
 		panic("bucket maxSize is not a power of two")
 	}
 
-	bucketCount := bits.Len(maxSize)
+	bucketCount := bits.Len64(maxSize)
 
 	p := &BucketedPool[T, E]{
 		buckets: make([]zeropool.Pool[T], bucketCount),
@@ -46,7 +46,7 @@ func NewBucketedPool[T ~[]E, E any](maxSize uint, makeFunc func(int) T) *Buckete
 // Get returns a new slice with capacity greater than or equal to size.
 // The resulting slice always has a capacity that is a power of two.
 // If size is greater than maxSize, then a slice is still returned, however it may not be drawn from a pool.
-func (p *BucketedPool[T, E]) Get(size int) T {
+func (p *BucketedPool[T, E]) Get(size int64) T {
 	if size < 0 {
 		panic(fmt.Sprintf("BucketedPool.Get with negative size %v", size))
 	}
@@ -55,7 +55,7 @@ func (p *BucketedPool[T, E]) Get(size int) T {
 		return nil
 	}
 
-	bucketIndex := bits.Len(uint(size - 1))
+	bucketIndex := bits.Len64(uint64(size - 1))
 
 	// If the requested size is larger than the size of the largest bucket, return a slice of the next power of two greater than or equal to size.
 	if bucketIndex >= len(p.buckets) {
@@ -76,13 +76,13 @@ func (p *BucketedPool[T, E]) Get(size int) T {
 // Put adds a slice to the right bucket in the pool.
 // If the slice does not belong to any bucket in the pool, it is ignored.
 func (p *BucketedPool[T, E]) Put(s T) {
-	size := uint(cap(s))
+	size := uint64(cap(s))
 
 	if size == 0 || size > p.maxSize {
 		return
 	}
 
-	bucketIndex := bits.Len(size - 1)
+	bucketIndex := bits.Len64(size - 1)
 	if bucketIndex >= len(p.buckets) {
 		// This should never happen as maxSize is checked above, and enforced to be a power of 2
 		return // Ignore slices larger than the largest bucket

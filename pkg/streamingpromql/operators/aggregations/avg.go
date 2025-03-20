@@ -24,7 +24,7 @@ type AvgAggregationGroup struct {
 	incrementalMeans       []bool    // True after reverting to incremental calculation of the mean value.
 	floatPresent           []bool
 	histograms             []*histogram.FloatHistogram
-	histogramPointCount    int
+	histogramPointCount    int64
 
 	// Keeps track of how many samples we have encountered thus far for the group at this point
 	// This is necessary to do per point (instead of just counting the input series) as a series may have
@@ -219,7 +219,7 @@ func (g *AvgAggregationGroup) accumulateHistograms(data types.InstantVectorSerie
 // It also takes the opportunity whilst looping through the floats to check if there
 // is a conflicting Histogram present. If both are present, an empty vector should
 // be returned. So this method removes the float+histogram where they conflict.
-func (g *AvgAggregationGroup) reconcileAndCountFloatPoints() (int, bool) {
+func (g *AvgAggregationGroup) reconcileAndCountFloatPoints() (int64, bool) {
 	// It would be possible to calculate the number of points when constructing
 	// the series groups. However, it requires checking each point at each input
 	// series which is more costly than looping again here and just checking each
@@ -228,7 +228,7 @@ func (g *AvgAggregationGroup) reconcileAndCountFloatPoints() (int, bool) {
 	// We also take two different approaches here: One with extra checks if we
 	// have both Floats and Histograms present, and one without these checks
 	// so we don't have to do it at every point.
-	floatPointCount := 0
+	floatPointCount := int64(0)
 	haveMixedFloatsAndHistograms := false
 	if len(g.floatPresent) > 0 && len(g.histograms) > 0 {
 		for idx, present := range g.floatPresent {

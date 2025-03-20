@@ -197,7 +197,7 @@ func (h *HistogramQuantileFunction) SeriesMetadata(ctx context.Context) ([]types
 		h.seriesGroupPairs[innerIdx].classicHistogramGroup = g.group
 	}
 
-	seriesMetadata := types.GetSeriesMetadataSlice(len(groups))
+	seriesMetadata := types.GetSeriesMetadataSlice(int64(len(groups)))
 	h.remainingGroups = make([]*bucketGroup, 0, len(groups))
 	for _, g := range groups {
 		seriesMetadata = append(seriesMetadata, types.SeriesMetadata{Labels: g.labels.DropMetricName()})
@@ -306,7 +306,7 @@ func (h *HistogramQuantileFunction) saveFloatsToGroup(fPoints []promql.FPoint, l
 		if g.pointBuckets[pointIdx] == nil {
 			// Remaining series count + 1 since we decrement the series count early to simplify each return point.
 			maxBuckets := int(g.remainingSeriesCount) + 1
-			g.pointBuckets[pointIdx], err = bucketSliceBucketedPool.Get(maxBuckets, h.memoryConsumptionTracker)
+			g.pointBuckets[pointIdx], err = bucketSliceBucketedPool.Get(int64(maxBuckets), h.memoryConsumptionTracker)
 			if err != nil {
 				return err
 			}

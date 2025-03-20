@@ -65,7 +65,7 @@ func (g *CountGroupAggregationGroup) AccumulateSeries(data types.InstantVectorSe
 }
 
 func (g *CountGroupAggregationGroup) ComputeOutputSeries(timeRange types.QueryTimeRange, memoryConsumptionTracker *limiting.MemoryConsumptionTracker) (types.InstantVectorSeriesData, bool, error) {
-	floatPointCount := 0
+	floatPointCount := int64(0)
 	for _, fv := range g.values {
 		if fv > 0 {
 			floatPointCount++

@@ -161,7 +161,7 @@ func NewLimitingBucketedPool[S ~[]E, E any](inner *pool.BucketedPool[S, E], elem
 // If the capacity of the returned slice would cause the max memory consumption limit to be exceeded, then an error is returned.
 //
 // Note that the capacity of the returned slice may be significantly larger than size, depending on the configuration of the underlying bucketed pool.
-func (p *LimitingBucketedPool[S, E]) Get(size int, tracker *limiting.MemoryConsumptionTracker) (S, error) {
+func (p *LimitingBucketedPool[S, E]) Get(size int64, tracker *limiting.MemoryConsumptionTracker) (S, error) {
 	// We don't bother checking the limit before we get the slice for a couple of reasons:
 	// - we prefer to enforce the limit based on the capacity of the returned slices, not the requested size, to more accurately capture the true memory utilisation
 	// - we expect that the vast majority of the time, the limit won't be hit, so the extra caution just slows things down

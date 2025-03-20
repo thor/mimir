@@ -135,7 +135,7 @@ func (v *InstantVectorSelector) NextSeries(ctx context.Context) (types.InstantVe
 			// Only create the slice once we know the series is a histogram or not.
 			// (It is possible to over-allocate in the case where we have both floats and histograms, but that won't be common).
 			if len(data.Histograms) == 0 {
-				remainingStepCount := v.Selector.TimeRange.StepCount - int(v.Selector.TimeRange.PointIndex(stepT)) // Only get a slice for the number of points remaining in the query range.
+				remainingStepCount := v.Selector.TimeRange.StepCount - v.Selector.TimeRange.PointIndex(stepT) // Only get a slice for the number of points remaining in the query range.
 
 				var err error
 				if data.Histograms, err = types.HPointSlicePool.Get(remainingStepCount, v.MemoryConsumptionTracker); err != nil {
@@ -157,7 +157,7 @@ func (v *InstantVectorSelector) NextSeries(ctx context.Context) (types.InstantVe
 		} else {
 			// Only create the slice once we know the series is a histogram or not.
 			if len(data.Floats) == 0 {
-				remainingStepCount := v.Selector.TimeRange.StepCount - int(v.Selector.TimeRange.PointIndex(stepT)) // Only get a slice for the number of points remaining in the query range.
+				remainingStepCount := v.Selector.TimeRange.StepCount - v.Selector.TimeRange.PointIndex(stepT) // Only get a slice for the number of points remaining in the query range.
 
 				var err error
 				if data.Floats, err = types.FPointSlicePool.Get(remainingStepCount, v.MemoryConsumptionTracker); err != nil {

@@ -155,7 +155,7 @@ func (a *Aggregation) SeriesMetadata(ctx context.Context) ([]types.SeriesMetadat
 	}
 
 	// Sort the list of series we'll return, and maintain the order of the corresponding groups at the same time
-	seriesMetadata := types.GetSeriesMetadataSlice(len(groups))
+	seriesMetadata := types.GetSeriesMetadataSlice(int64(len(groups)))
 	a.remainingGroups = make([]*group, 0, len(groups))
 
 	for _, g := range groups {

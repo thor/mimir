@@ -279,7 +279,7 @@ func (e *vectorVectorBinaryOperationEvaluator) computeResult(left types.InstantV
 
 		// We can't reuse either existing slice, so create a new one.
 		var err error
-		if fPoints, err = types.FPointSlicePool.Get(minPoints, e.memoryConsumptionTracker); err != nil {
+		if fPoints, err = types.FPointSlicePool.Get(int64(minPoints), e.memoryConsumptionTracker); err != nil {
 			return err
 		}
 		return nil
@@ -306,7 +306,7 @@ func (e *vectorVectorBinaryOperationEvaluator) computeResult(left types.InstantV
 
 		// We can't reuse either existing slice, so create a new one.
 		var err error
-		if hPoints, err = types.HPointSlicePool.Get(minPoints, e.memoryConsumptionTracker); err != nil {
+		if hPoints, err = types.HPointSlicePool.Get(int64(minPoints), e.memoryConsumptionTracker); err != nil {
 			return err
 		}
 		return nil

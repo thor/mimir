@@ -232,12 +232,12 @@ func (b *OneToOneVectorVectorBinaryOperation) computeOutputSeries() ([]types.Ser
 
 	outputSeriesMap := map[string]oneToOneBinaryOperationOutputSeriesWithLabels{}
 
-	leftSeriesUsed, err := types.BoolSlicePool.Get(len(b.leftMetadata), b.MemoryConsumptionTracker)
+	leftSeriesUsed, err := types.BoolSlicePool.Get(int64(len(b.leftMetadata)), b.MemoryConsumptionTracker)
 	if err != nil {
 		return nil, nil, nil, nil, err
 	}
 
-	rightSeriesUsed, err := types.BoolSlicePool.Get(len(b.rightMetadata), b.MemoryConsumptionTracker)
+	rightSeriesUsed, err := types.BoolSlicePool.Get(int64(len(b.rightMetadata)), b.MemoryConsumptionTracker)
 	if err != nil {
 		return nil, nil, nil, nil, err
 	}
@@ -284,7 +284,7 @@ func (b *OneToOneVectorVectorBinaryOperation) computeOutputSeries() ([]types.Ser
 		leftSeriesUsed[leftSeriesIndex] = true
 	}
 
-	allMetadata := types.GetSeriesMetadataSlice(len(outputSeriesMap))
+	allMetadata := types.GetSeriesMetadataSlice(int64(len(outputSeriesMap)))
 	allSeries := make([]*oneToOneBinaryOperationOutputSeries, 0, len(outputSeriesMap))
 
 	for _, outputSeries := range outputSeriesMap {
